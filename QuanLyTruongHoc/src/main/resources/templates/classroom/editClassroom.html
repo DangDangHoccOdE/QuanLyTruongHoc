@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lớp học</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <style>
+        .note {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form action="#" method="post" th:object="${classroomDto}">
+        <h1 class="text-center">Chỉnh sửa thông tin lớp học</h1>
+        <div>
+            <a class="btn btn-info" th:href="@{/}">Trang chủ</a>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- name -->
+                <div class="mb-3">
+                    <label for="className" class="form-label">Tên lớp</label><span class="note">*</span>
+                    <input type="text" class="form-control" id="className" name="className" th:field="${classroom.className}">
+                    <p th:if="${#fields.hasErrors('className')}" th:errorclass="text-danger"
+                       th:errors="${classroomDto.className}"></p>
+                </div>
+
+                <!-- homeroom teacher -->
+                <div class="mb-3">
+                    <label for="teacherId" class="form-label">Giáo viên chủ nhiệm</label><span class="note">*</span>
+                    <select id="teacherId" name="teacherId" class="form-control" th:field="${classroomDto.teacherId}">
+                        <option
+                                th:each="teacher : ${teachers}"
+                                th:value="${teacher.teacherId}"
+                                th:text="${teacher.teacherName}"
+                        ></option>
+                    </select>
+                </div>
+
+                <!-- select list subject -->
+                <div class="mb-3">
+                    <label for="subjectsId" class="form-label">Chọn môn học</label><span class="note">*</span>
+                    <select id="subjectsId" name="subjectsId" th:field="${classroomDto.subjectsId}" multiple>
+                        <option
+                                th:each="subject : ${subjects}"
+                                th:value="${subject.subId}"
+                                th:text="${subject.subName}"
+                        ></option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('subjectsId')}" th:errorclass="text-danger"
+                       th:errors="${classroomDto.subjectsId}"></p>
+                </div>
+                <!-- show id -->
+                <div class="mb-3">
+                    <input type="hidden" class="form-control" id="id" name="id" readonly th:field="${classroom.id}">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <!-- block -->
+                <div class="mb-3">
+                    <label for="classBlock" class="form-label">Khối</label><span class="note">*</span>
+                    <select id="classBlock" name="classBlock" class="form-control"
+                            th:field="*{classBlock}">
+                        <option th:value="'A'">A</option>
+                        <option th:value="'B'">B</option>
+                        <option th:value="'D'">D</option>
+                    </select>
+                    <p th:if="${#fields.hasErrors('classBlock')}" th:errorclass="text-danger"
+                       th:errors="${classroomDto.classBlock}"></p>
+                </div>
+
+                <!-- school Year -->
+                <div class="mb-3">
+                    <label for="schoolYear" class="form-label">Niên khóa</label><span class="note">*</span>
+                    <select id="schoolYear" name="schoolYear" class="form-control" th:field="${classroomDto.schoolYear}">
+                        <option th:each="year : ${#numbers.sequence(1980,2024)}" th:value="${year}"
+                                th:text="${year}"></option>
+                    </select>
+                </div>
+
+                <hr>
+                <div class="row">
+                    <div class="offset-sm-4 col-sm-4 d-grid">
+                        <input type="submit" class="btn btn-success" id="submit" value="Lưu thông tin" name="submit">
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <a th:href="@{/api/classroom/showAllClassroom}" class="btn btn-outline-primary" role="button">Thoát</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý giáo viên</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <style>
+        .note {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form class="form" action="#" method="post" th:object="${teacherDto}">
+        <h3 class="text-center">Chỉnh sửa thông tin</h3>
+        <div>
+            <a class="btn btn-info" th:href="@{/}">Trang chủ</a>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- id -->
+                <div class="mb-3">
+                    <label for="id" class="form-label">Mã giáo viên</label><span class="note">*</span>
+                    <input type="text" readonly class="form-control" id="id" name="id" th:value="*{id}">
+                </div>
+
+                <!-- name -->
+                <div class="mb-3">
+                    <label for="name" class="form-label">Tên giáo viên</label><span class="note">*</span>
+                    <input readonly type="text" class="form-control" id="name" name="name" th:field="*{name}">
+                    <p th:if="(${#fields.hasErrors('name')})" th:errorclass="text-danger" th:errors="*{name}"></p>
+                </div>
+
+                <!-- date of birth -->
+                <div class="mb-3">
+                    <label for="dateOfBirth" class="form-label">Ngày sinh</label><span class="note">*</span>
+                    <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth"
+                           th:field="*{dateOfBirth}">
+                    <p th:if="(${#fields.hasErrors('dateOfBirth')})" th:errorclass="text-danger"
+                       th:errors="*{dateOfBirth}"></p>
+                </div>
+
+                <!-- address -->
+                <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ</label><span class="note">*</span>
+                    <input type="text" class="form-control" id="address" name="address" th:field="*{address}">
+                    <p th:if="(${#fields.hasErrors('address')})" th:errorclass="text-danger" th:errors="*{address}"></p>
+                </div>
+
+                <!-- gender -->
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Giới Tính</label><span class="note">*</span>
+                    <select id="gender" name="gender" th:field="*{gender}">
+                        <option th:value="Nam">Nam</option>
+                        <option th:value="Nữ">Nữ</option>
+                    </select>
+                    <p th:if="(${#fields.hasErrors('gender')})" th:errorclass="text-danger" th:errors="*{gender}"></p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <!-- phone -->
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone</label><span class="note">*</span>
+                    <input type="text" class="form-control" id="phone" name="phone" th:field="*{phone}">
+                    <p th:if="(${#fields.hasErrors('phone')})" th:errorclass="text-danger" th:errors="*{phone}"></p>
+                </div>
+
+                <!-- role -->
+                <div sec:authorize="hasRole('PRINCIPAL')" class="mb-3">
+                    <label for="rolesName" class="form-label">Vai trò</label><span class="note">*</span>
+                    <select class="form-control" id="rolesName" name="rolesName" th:field="*{rolesName}" multiple>
+                        <option th:value="'ROLE_HOMEROOMTEACHER'">Giáo Viên Chủ Nhiệm</option>
+                        <option th:value="'ROLE_TEACHER'">Giáo Viên Bộ Môn</option>
+                        <option th:value="'ROLE_PRINCIPAL'">Hiệu trưởng</option>
+                    </select>
+                    <p th:if="(${#fields.hasErrors('rolesName')})" th:errorclass="text-danger"
+                       th:errors="*{rolesName}"></p>
+                </div>
+
+                <div class="mb-3">
+                    <label for="emailTeacher" class="form-label">Email: </label><span class="note">*</span>
+                    <input type="text" class="form-control" id="emailTeacher" name="emailTeacher"
+                           th:field="*{emailTeacher}">
+                    <p th:if="(${#fields.hasErrors('emailTeacher')})" th:errorclass="text-danger"
+                       th:errors="*{emailTeacher}"></p>
+                </div>
+                <hr>
+                <div>
+                    <a class="btn btn-warning"
+                       th:href="@{/api/teacher/infoAccount(teacherId=${teacher.teacherId})}">Thay
+                        đổi tài khoản & mật khẩu</a>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="offset-sm-4 col-sm-4 d-grid">
+                        <input class="btn btn-success" type="submit" id="submit"
+                               value="Lưu Thông Tin" name="submit">
+                    </div>
+                    <div sec:authorize="hasRole('PRINCIPAL')" class="col-sm-4 d-grid">
+                        <a class="btn btn-outline-primary" th:href="@{/api/teacher/showAllTeacher}"
+                           role="button">Thoát</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+</body>
+</html>

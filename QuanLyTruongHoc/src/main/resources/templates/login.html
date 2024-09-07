@@ -1,0 +1,49 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Đăng nhập</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' th:href="@{/css/style.css}">
+
+</head>
+<body>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+        <h3>Trường THPT Thăng Long</h3>
+        <!-- Icon -->
+        <div class="fadeIn first">
+            <img th:src="@{/image/logo.png}" id="icon" alt="User Icon" />
+        </div>
+
+        <!-- Login Form -->
+        <form action="#" th:action="@{/authenticateTheUser}" method="post">
+            <input type="text" id="username" class="fadeIn second" name="username" placeholder="Tài khoản">
+            <input type="password" id="password" class="fadeIn third" name="password" placeholder="Mật khẩu">
+            <input type="submit" class="fadeIn fourth" value="Đăng nhập">
+
+            <div th:if="${param.error}">
+                <span style="color:red">Tài khoản hoặc mật khẩu không đúng! </span>
+            </div>
+
+
+        </form>
+
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" href="#">Quên mật khẩu?</a>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

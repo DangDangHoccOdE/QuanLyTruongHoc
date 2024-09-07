@@ -1,0 +1,122 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý học bạ</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <style>
+        .note {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form class="form" action="#" method="post" th:object="${academicTranscriptDetailDto}">
+        <h3 class="text-center">Chỉnh sửa nội dung sổ học bạ</h3>
+        <div>
+            <a class="btn btn-info" th:href="@{/}">Trang chủ</a>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- id -->
+                <div class="mb-3">
+                    <label for="studentId" class="form-label">Mã học sinh: </label> <span class="note">*</span>
+                    <input type="text" class="form-control" readonly th:field="*{studentId}" id="studentId"
+                           name="studentId">
+                </div>
+
+                <!-- name -->
+                <div class="mb-3">
+                    <label for="studentName" class="form-label">Họ và Tên: </label> <span class="note">*</span>
+                    <input type="text" readonly class="form-control" id="studentName" name="studentName"
+                           th:field="*{studentName}">
+                </div>
+
+                <!-- Class -->
+                <div class="mb-3">
+                    <label for="className" class="form-label">Lớp: </label><span class="note">*</span> <input
+                        type="text" readonly class="form-control" id="className" name="className"
+                        th:field="*{className}">
+                </div>
+
+                <!-- date -->
+                <div class="mb-3">
+                    <label for="time" class="form-label">Thời gian: </label><span class="note">*</span>
+                    <input type="date" class="form-control" id="time"
+                           name="time" th:field="*{time}">
+                    <p th:if="${#fields.hasErrors('time')}" th:errorclass="text-danger"
+                       th:errors="*{time}"></p>
+                </div>
+
+                <!-- semester -->
+                <div class="mb-3">
+                    <label for="semester" class="form-label">Học kỳ: </label> <span class="note">*</span>
+                    <select id="semester" name="semester" th:field="*{semesterYear}">
+<!--                        <option th:value="'Năm 2023 học kỳ 1'">Năm 2023 học kỳ 1</option>-->
+<!--                        <option th:value="'Năm 2023 học kỳ 2'">Năm 2023 học kỳ 2</option>-->
+<!--                        <option th:value="'Năm 2024 học kỳ 1'">Năm 2024 học kỳ 1</option>-->
+                        <option th:value="'Năm 2024 học kỳ 2'">Năm 2024 học kỳ 2</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+
+                <!-- HomeroomTeacher -->
+                <div class="mb-3">
+                    <label for="teacherName" class="form-label">Giáo viên: </label><span class="note">*</span>
+                    <input type="text" class="form-control" readonly id="teacherName" name="teacherName"
+                           th:value="${teacher.teacherName}">
+                    <p th:if="${#fields.hasErrors('teacherName')}" th:errorclass="text-danger"
+                       th:errors="*{teacherName}"></p>
+                </div>
+
+                <!-- score -->
+                <div class="mb-3">
+                    <label for="score" class="form-label">Điểm: </label><span class="note">*</span>
+                    <input type="number" step="any" class="form-control" id="score" name="score"
+                           th:field="*{score}">
+                    <p th:if="${#fields.hasErrors('score')}" th:errorclass="text-danger"
+                       th:errors="*{score}"></p>
+                </div>
+
+                <!--  review -->
+                <div class="mb-3">
+                    <label for="reviewOfTeachersAndParents" class="form-label">Nhận xét giáo viên và gia đình: </label><span class="note">*</span> <textarea
+                        class="form-control" id="reviewOfTeachersAndParents" name="reviewOfTeachersAndParents"
+                        th:field="*{reviewOfTeachersAndParents}"></textarea>
+                    <p th:if="${#fields.hasErrors('reviewOfTeachersAndParents')}" th:errorclass="text-danger"
+                       th:errors="*{reviewOfTeachersAndParents}"></p>
+                </div>
+
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">
+                        <input class="btn btn-primary" type="submit" id="submit"
+                               value="Lưu Thông Tin" name="submit">
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <a class="btn btn-outline-primary" th:href="@{/api/academicTranscript/showAcademicTranscript(studentId=${academicTranscriptDetailDto.studentId})}"
+                           role="button">Thoát</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+</body>
+</html>

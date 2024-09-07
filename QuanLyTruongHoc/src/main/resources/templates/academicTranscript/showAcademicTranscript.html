@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách sổ học bạ</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center my-4">Sổ học bạ</h1>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group">
+                <a class="btn btn-info" th:href="@{/}">Trang chủ</a>
+                <a class="btn btn-success" style="margin-left: 5px" th:href="@{/api/academicTranscriptDetail/create(idStudent=${student.studentId})}">Thêm
+                    sổ học bạ</a>
+                <a class="btn btn-warning" style="margin-left: 5px"
+                   th:href="@{/api/student/showAllStudent(classId=${classroom.id})}">Quay lại</a>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Mã học sinh</th>
+            <th>Họ tên</th>
+            <th>Lớp</th>
+            <th>GVCN</th>
+            <th>Điểm TB</th>
+            <th>Nhận xét của GV&GĐ</th>
+            <th>Học kỳ</th>
+            <th>Thời gian</th>
+            <th>Học lực</th>
+            <th>Tùy chọn</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="academicTranscriptDetail : ${academicTranscriptDetails}">
+            <th th:text="${student.studentId}"></th>
+            <th th:text="${student.studentName}"></th>
+            <th th:text="${student.classroom.className}"></th>
+            <th th:text="${classroom.teacher.teacherName}"></th>
+            <th th:text="${academicTranscriptDetail.score}"></th>
+            <th th:text="${academicTranscriptDetail.reviewOfTeachersAndParents}"></th>
+            <th th:text="${academicTranscriptDetail.semesterYear}"></th>
+            <th th:text="${academicTranscriptDetail.time}"></th>
+            <th th:text="${academicTranscriptDetail.academicAbility}"></th>
+            <td style="white-space: nowrap">
+                <a class="btn btn-info btn-sm"
+                   th:href="@{/api/reportCard/showReportCard(studentId=${student.studentId},
+                            semesterYear=${academicTranscriptDetail.semesterYear})}">Xem bảng điểm</a>
+                <a sec:authorize="hasAnyRole('PRINCIPAL','HOMEROOMTEACHER')"  class="btn btn-primary btn-sm"
+                   th:href="@{/api/academicTranscriptDetail/edit(academicTranscriptDetailId=${academicTranscriptDetail.id})}">Chỉnh sửa</a>
+                <a sec:authorize="hasRole('PRINCIPAL')" class="btn btn-danger btn-sm"
+                   th:href="@{/api/academicTranscriptDetail/delete(academicTranscriptDetailId=${academicTranscriptDetail.id})}"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+</body>
+</html>

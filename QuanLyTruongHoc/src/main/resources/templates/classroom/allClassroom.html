@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Lớp Học</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center my-4">Danh sách lớp học</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="btn-group">
+                <a class="btn btn-info" th:href="@{/}">Trang chủ</a>
+                <a sec:authorize="hasRole('PRINCIPAL')" class="btn btn-success" style="margin-left: 5px" th:href="@{/api/classroom/create}">Thêm lớp học</a>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Mã lớp</th>
+            <th>Tên Lớp</th>
+            <th>Khối lớp</th>
+            <th>Niên Khóa</th>
+            <th>Giáo viên chủ nhiệm</th>
+            <th>Tùy chọn</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="classroom : ${classrooms}">
+            <td th:text="${classroom.id}"></td>
+            <td th:text="${classroom.className}"></td>
+            <td th:text="${classroom.classBlock}"></td>
+            <td th:text="${classroom.schoolYear}"></td>
+            <td th:text="${classroom.teacher.teacherName}"></td>
+            <td style="white-space: nowrap">
+                <a class="btn btn-info btn-sm"
+                   th:href="@{/api/student/showAllStudent(classId=${classroom.id})}">Xem lớp</a>
+                <a class="btn btn-dark btn-sm"
+                   th:href="@{/api/registerNotebook/showRegisterNotebook(classId=${classroom.id})}">Xem sổ đầu bài</a>
+                <a class="btn btn-primary btn-sm" sec:authorize="hasRole('PRINCIPAL')"
+                   th:href="@{/api/classroom/edit(classId=${classroom.id})}">Chỉnh sửa</a>
+                <a class="btn btn-danger btn-sm" sec:authorize="hasRole('PRINCIPAL')"
+                   th:href="@{/api/classroom/delete(classId=${classroom.id})}"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa ?')">Xóa</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+</body>
+</html>

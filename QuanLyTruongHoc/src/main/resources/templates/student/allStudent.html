@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý học sinh</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center my-4">Danh sách học sinh</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="btn-group">
+                <a class="btn btn-info" th:href="@{/}">Trang chủ</a>
+                <a class="btn btn-warning" style="margin-left: 5px" th:href="@{/api/classroom/showAllClassroom}">Quay lại</a>
+                <a sec:authorize="hasRole('PRINCIPAL')" class="btn btn-success"  style="margin-left: 5px" th:href="@{/api/student/create(classId=${classroom.id})}">Thêm học sinh</a>
+                <a sec:authorize="hasAnyRole('PRINCIPAL','HOMEROOMTEACHER')" class="btn btn-secondary" style="margin-left: 5px" th:href="@{/api/subject/showAllSubject(classId=${classroom.id})}">Xem môn học</a>
+                <a class="btn btn-primary"  style="margin-left: 5px" th:href="@{/api/reportCardDetail/create(classId=${classroom.id})}">Thêm điểm</a>
+                <a class="btn btn-info" style="margin-left: 5px" th:href="@{/api/scoreSheet/showScoreSheet(classId=${classroom.id},semesterYear=${'Năm 2024 học kỳ 2'})}">Xem điểm lớp</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="btn-group float-right">
+                <form class="form-inline" th:action="@{/api/student/getStudentByName}" method="get">
+                    <label for="selectName">Tìm kiếm học sinh theo tên:</label>
+                    <input type="hidden" name="classId" th:value="${classroom.id}">
+                    <input type="text" id="selectName" name="studentName">
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </form>
+            </div>
+            <div class="btn-group float-right">
+                <form class="form-inline" th:action="@{/api/student/getStudentByGender}" method="get">
+                    <label for="selectGender">Tìm kiếm học sinh theo giới tính:</label>
+                    <input type="hidden" name="classId" th:value="${classroom.id}">
+                    <select id="selectGender" name="selectGender">
+                        <option th:value="Nam">Nam</option>
+                        <option th:value="Nữ">Nữ</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </form>
+            </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Số thứ tự</th>
+            <th>Mã học sinh</th>
+            <th>Tên</th>
+            <th>Lớp</th>
+            <th>Ngày sinh</th>
+            <th>Giới Tính</th>
+            <th>Địa chỉ</th>
+            <th>Email</th>
+            <th>Số điện thoại</th>
+            <th>Tùy chọn</th>
+            <th sec:authorize= "hasAnyRole('PRINCIPAL','HOMEROOMTEACHER')">Phụ Huynh</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr th:each="student,iterStat : ${students}">
+                <td th:text="${iterStat.index+1}"></td>
+                <td th:text="${student.studentId}"></td>
+                <td th:text="${student.studentName}"></td>
+                <td th:text="${student.classroom.className}"></td>
+                <td th:text="${student.dateOfBirth.toString().substring(0,10)}"></td>
+                <td th:text="${student.gender}"></td>
+                <td th:text="${student.address}"></td>
+                <td th:text="${student.account.getEmail()}"></td>
+                <td th:text="${student.studentPhone}"></td>
+                <td style="white-space: nowrap">
+                    <a class="btn btn-info btn-sm"
+                       th:href="@{/api/reportCard/showReportCard(studentId=${student.studentId},semesterYear=${'Năm 2024 học kỳ 2'})}">Xem bảng điểm</a>
+                    <a sec:authorize= "hasAnyRole('PRINCIPAL','HOMEROOMTEACHER')" class="btn btn-secondary btn-sm"
+                       th:href="@{/api/academicTranscript/showAcademicTranscript(studentId=${student.studentId})}">Xem sổ học bạ</a>
+                    <a  sec:authorize="hasRole('PRINCIPAL')" class="btn btn-primary btn-sm"
+                            th:href="@{/api/student/edit(studentId=${student.studentId})}">Chỉnh sửa</a>
+                    <a  sec:authorize="hasRole('PRINCIPAL')" class="btn btn-danger btn-sm"
+                       th:href="@{/api/student/delete(studentId=${student.studentId})}"
+                        onclick="return confirm('Bạn có chắc chắn ?')">Xóa</a>
+                </td>
+                <td>
+                    <a sec:authorize= "hasAnyRole('PRINCIPAL','HOMEROOMTEACHER')" class="btn btn-dark btn-sm"
+                       th:href="@{/api/parent/showParent(studentId=${student.studentId})}">Xem thông tin</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+</body>
+</html>
